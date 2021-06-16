@@ -145,7 +145,7 @@ void set_pwm( int pwm ){
 ///////////////////////////////////////////////////////////////////
 void cmd_callback ( const geometry_msgs::Twist&  twistMsg ){
   
-  ctl_ref  = twistMsg.angular.z; 
+  ctl_ref  = twistMsg.linear.x; 
   ctl_mode = twistMsg.linear.z;  // 1    or 2   or 3
 
   time_last_com = millis(); // for watchdog
