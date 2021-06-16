@@ -42,7 +42,7 @@ const unsigned long baud_rate = 115200;
 // Controller
 
 //Controller parameters here
-const float filter_rc  =  0.1;
+const float filter_rc  =  50; // ms
 // ...
 // etc
 // ...
@@ -73,8 +73,7 @@ int ctl_mode     = 0;
 float cmd = 0;
 
 // Controller memory (differentiation, filters and integral actions)
-float filter_signal_now   = 0;
-float filter_signal_old   = 0;
+float filter_state   = 0;
 
 // Loop timing
 unsigned long time_now       = 0;
@@ -166,6 +165,16 @@ void ctl(){
   // ...
 
   ////////////////////
+  // Filters
+  ////////////////////
+   float alpha = time_period_low / ( time_period_low + filter_rc );
+   float read_value     = ctl_ref;
+   float filtered_value = alpha * read_value + (1-alpha) * filter_state;
+
+   //Filter memory
+   filter_state = filtered_value;
+
+  ////////////////////
   // Controllers
   ////////////////////
 
@@ -176,7 +185,7 @@ void ctl(){
   if (ctl_mode == 0 ){
     
     // Zero output
-    cmd = 0 ;
+    cmd = filtered_value ; //DEBUG CMD = filtered ref
 
   }
   //////////////////////////////////////////////////////
@@ -297,6 +306,7 @@ void loop(){
     // For DEBUG
     sensors_data[2] = ctl_ref;  // set point received by arduino
     sensors_data[3] = ctl_mode; // ctl mode
+    sensors_data[4] = cmd; // ctl mode
     sensors_data[7] = (float)( time_now - time_last_com ); // for com debug
     sensors_data[8] = (float)dt;
 

@@ -45,7 +45,7 @@ class python_controller(object):
         self.sensor         = 0  # sensor feeback buffer
         
         # For DEBUG
-        #self.tick = 0
+        self.tick = 0
 
         
     #######################################
@@ -57,8 +57,8 @@ class python_controller(object):
             self.arduino_mode   = 0
             
             #Debug test sinus ref
-            #self.tick = self.tick + 1
-            #self.arduino_cmd    = 5 * np.sin( 0.01 * self.tick / self.dt )
+            self.tick = self.tick + 1
+            self.arduino_cmd    = 5 * np.sin( 0.01 * self.tick / self.dt )
             
         else:
             ##########################
