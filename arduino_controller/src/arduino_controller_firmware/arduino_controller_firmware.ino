@@ -11,7 +11,6 @@
 #define USB_USBCON
 #include <ros.h>
 #include <std_msgs/Float32MultiArray.h>
-#include <geometry_msgs/Twist.h>
 
 
 ///////////////////////////////////////////////////////////////////
@@ -229,7 +228,6 @@ void ctl(){
 
 
 // ROS suscriber
-//ros::Subscriber<geometry_msgs::Twist> cmd_subscriber("/cmd", &cmd_callback) ;
 ros::Subscriber<std_msgs::Float32MultiArray> cmd_subscriber("/cmd", &cmd_callback) ;
 
 ///////////////////////////////////////////////////////////////////

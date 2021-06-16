@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 import rospy
-import numpy as np
-from geometry_msgs.msg import Twist
+#import numpy as np
 from sensor_msgs.msg import Joy
 from std_msgs.msg import Float32MultiArray
 
@@ -17,7 +16,6 @@ class python_controller(object):
         self.sub_sensors    = rospy.Subscriber("sensors", Float32MultiArray , self.read_feedback_from_arduino, queue_size=1)
 
         # Init publishers
-        #self.pub_cmd    = rospy.Publisher("cmd", Twist , queue_size=1)
         self.pub_cmd    = rospy.Publisher("cmd", Float32MultiArray , queue_size=1)
         
         # Timer
@@ -46,7 +44,7 @@ class python_controller(object):
         self.sensor         = 0  # sensor feeback buffer
         
         # For DEBUG
-        self.tick = 0
+        #self.tick = 0
 
         
     #######################################
@@ -58,8 +56,8 @@ class python_controller(object):
             self.arduino_mode   = 0
             
             #Debug test sinus ref
-            self.tick = self.tick + 1
-            self.arduino_cmd    = 5 * np.sin( 0.01 * self.tick / self.dt )
+            #self.tick = self.tick + 1
+            #self.arduino_cmd    = 5 * np.sin( 0.01 * self.tick / self.dt )
             
         else:
             ##########################
@@ -150,8 +148,7 @@ class python_controller(object):
     ##########################################################################################
     def send_cmd_to_arduino(self):
  
-      #Init encd_info msg
-      #cmd_prop = Twist()
+      #Init msg
       cmd_msg = Float32MultiArray()
       data    = [0,0,0,0,0,0]
 
