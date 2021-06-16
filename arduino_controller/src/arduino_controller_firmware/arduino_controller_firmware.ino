@@ -49,7 +49,7 @@ const float filter_rc  =  0.1;
  
 // Loop period 
 const unsigned long time_period_low   = 2;    // 500 Hz for internal PID loop
-const unsigned long time_period_high  = 10;   // 100 Hz  for ROS communication
+const unsigned long time_period_high  = 20;   // 50 Hz  for ROS communication
 const unsigned long time_period_com   = 1000; // 1000 ms = max com delay (watchdog)
 
 // Hardware min-zero-max range 
