@@ -12,14 +12,14 @@ class python_controller(object):
     def __init__(self):
 
         # Init subscribers  
-        self.sub_joy        = rospy.Subscriber("joy", Joy , self.read_joy , queue_size=1)
-        self.sub_sensors    = rospy.Subscriber("sensors", Float32MultiArray , self.read_feedback_from_arduino, queue_size=1)
+        self.sub_joy        = rospy.Subscriber("joy", Joy , self.read_joy , queue_size=1) # self.read_joy is the function called when a message is received.
+        self.sub_sensors    = rospy.Subscriber("sensors", Float32MultiArray , self.read_feedback_from_arduino, queue_size=1) # self.read_feedback is the function called when a message is received.
 
         # Init publishers
         self.pub_cmd    = rospy.Publisher("cmd", Float32MultiArray , queue_size=1)
         
         # Timer
-        self.dt         = 0.05
+        self.dt         = 0.02
         self.timer      = rospy.Timer( rospy.Duration( self.dt ), self.timed_controller )
         
         #################
@@ -57,7 +57,7 @@ class python_controller(object):
             
             #Debug test sinus ref
             #self.tick = self.tick + 1
-            #self.arduino_cmd    = 5 * np.sin( 0.01 * self.tick / self.dt )
+            #self.arduino_cmd    = 5 * np.sin( 2*3.1416 * self.tick * self.dt )
             
         else:
             ##########################
@@ -88,11 +88,11 @@ class python_controller(object):
         self.send_cmd_to_arduino()
 
 
-    ####################################### 
+    ####################################### Function called when a message is received from msg /joy
     def read_joy( self, joy_msg ):
         """ """
     
-        self.user_input        = joy_msg.axes[3]    # Up-down Right joystick 
+        self.user_ref        = joy_msg.axes[3]    # Up-down Right joystick 
         self.high_level_mode   = 0            
                 
         # Software deadman switch
@@ -141,7 +141,7 @@ class python_controller(object):
         # Deadman is un-pressed
         else:
             
-            self.user_input        = 0
+            self.user_ref        = 0
             self.high_level_mode   = 0
       
       
@@ -150,9 +150,9 @@ class python_controller(object):
  
       #Init msg
       cmd_msg = Float32MultiArray()
-      data    = [0,0,0,0,0,0]
+      data    = [0.0,0.0,0.0,0.0,0.0,0.0]
 
-      #Msg
+      #Msgard
       data[1]  = self.arduino_cmd      # Command 
       data[0]  = self.arduino_mode     # Arduino mode
       
@@ -162,7 +162,7 @@ class python_controller(object):
       self.pub_cmd.publish(cmd_msg)
 
 
-    ####################################### 
+    ####################################### Function called when a message is received from msg /sensors
     def read_feedback_from_arduino( self, msg):
 
         # Read feedback from arduino

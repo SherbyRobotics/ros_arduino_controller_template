@@ -1,3 +1,4 @@
+
 //=========================HEADER=============================================================
 // Firmware for the Arduino managing the low-level controller
 //============================================================================================
@@ -58,7 +59,7 @@ const int pwm_max = 511;
 
 // Units Conversion
 const double batteryV  = 24; 
-const double volt2pwm   = (pwm_max-pwm_zer)/batteryV;
+const double volt2pwm   = (pwm_max-pwm_zer)/batteryV; 
 
 ///////////////////////////////////////////////////////////////////
 // Memory
@@ -83,10 +84,10 @@ unsigned long time_last_com  = 0; //com watchdog
 
 
 ///////////////////////////////////////////////////////////////////
-// Convertion functions
+// Conversion functions
 ///////////////////////////////////////////////////////////////////
 
-// Convertion function : Cmd --> PWM
+// Conversion function : Cmd voltage --> PWM
 double cmd2pwm (double cmd) {
   
   // Scale and offset
@@ -150,7 +151,7 @@ void cmd_callback ( const std_msgs::Float32MultiArray&  Msg ){
 }
 
 ///////////////////////////////////////////////////////////////////
-// Controller One tick
+// Controller One tick function
 ///////////////////////////////////////////////////////////////////
 void ctl(){
 
@@ -287,7 +288,7 @@ void loop(){
     
     ctl(); // one control tick
 
-    time_last_low = time_now ;
+    time_last_low = time_now;
   }
 
   ////////////////////////////////////////
@@ -295,7 +296,7 @@ void loop(){
   ///////////////////////////////////////
 
   unsigned long dt = time_now - time_last_high;
-  if (dt > time_period_high ) {
+  if (dt > time_period_high ) { // The loop will by slightly slower since there is some overhead to execute the loop.
 
     // Feedback loop
     sensors_data[0] = 0;
