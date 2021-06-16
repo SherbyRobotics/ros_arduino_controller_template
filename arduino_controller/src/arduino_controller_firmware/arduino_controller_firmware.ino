@@ -142,10 +142,10 @@ void set_pwm( int pwm ){
 ///////////////////////////////////////////////////////////////////
 // Read command from ROS
 ///////////////////////////////////////////////////////////////////
-void cmd_callback ( const geometry_msgs::Twist&  twistMsg ){
+void cmd_callback ( const std_msgs::Float32MultiArray&  Msg ){
   
-  ctl_ref  = twistMsg.linear.x; 
-  ctl_mode = twistMsg.linear.z;  // 1    or 2   or 3
+  ctl_ref  = Msg.data[1]; 
+  ctl_mode = Msg.data[0];  // 1    or 2   or 3
 
   time_last_com = millis(); // for watchdog
 }
@@ -229,8 +229,8 @@ void ctl(){
 
 
 // ROS suscriber
-ros::Subscriber<geometry_msgs::Twist> cmd_subscriber("/cmd", &cmd_callback) ;
-
+//ros::Subscriber<geometry_msgs::Twist> cmd_subscriber("/cmd", &cmd_callback) ;
+ros::Subscriber<std_msgs::Float32MultiArray> cmd_subscriber("/cmd", &cmd_callback) ;
 
 ///////////////////////////////////////////////////////////////////
 // Arduino Initialization

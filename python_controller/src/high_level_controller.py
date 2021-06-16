@@ -17,7 +17,8 @@ class python_controller(object):
         self.sub_sensors    = rospy.Subscriber("sensors", Float32MultiArray , self.read_feedback_from_arduino, queue_size=1)
 
         # Init publishers
-        self.pub_cmd    = rospy.Publisher("cmd", Twist , queue_size=1)
+        #self.pub_cmd    = rospy.Publisher("cmd", Twist , queue_size=1)
+        self.pub_cmd    = rospy.Publisher("cmd", Float32MultiArray , queue_size=1)
         
         # Timer
         self.dt         = 0.05
@@ -150,14 +151,18 @@ class python_controller(object):
     def send_cmd_to_arduino(self):
  
       #Init encd_info msg
-      cmd_prop = Twist()
-      
+      #cmd_prop = Twist()
+      cmd_msg = Float32MultiArray()
+      data    = [0,0,0,0,0,0]
+
       #Msg
-      cmd_prop.linear.x  = self.arduino_cmd   # Command 
-      cmd_prop.linear.z  = self.arduino_mode     # Arduino mode
+      data[1]  = self.arduino_cmd      # Command 
+      data[0]  = self.arduino_mode     # Arduino mode
+      
+      cmd_msg.data = data
 
       # Publish cmd msg
-      self.pub_cmd.publish(cmd_prop)
+      self.pub_cmd.publish(cmd_msg)
 
 
     ####################################### 
